@@ -1,31 +1,40 @@
 import { Text, type TextProps, StyleSheet } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Colors } from '@/constants/Colors';
 
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
+  vakit: keyof typeof Colors,
+  size?: "sm" | "lg" | "xl" | "5xl";
+  weight?: "light" | "normal" | "medium" | "semibold" | "bold";
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
 };
 
 export function ThemedText({
   style,
-  lightColor,
-  darkColor,
+  vakit,
   type = 'default',
+  size = 'sm',
+  weight = 'medium',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const color = useThemeColor(
+    vakit,
+    // vakit,
+    "text"
+  );
 
   return (
     <Text
       style={[
         { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
+        size === 'lg' ? { fontSize: 20 } : undefined,
+        size === 'xl' ? { fontSize: 24 } : undefined,
+        size === '5xl' ? { fontSize: 52 } : undefined,
+        weight === 'light' ? { fontWeight: '300' } : undefined,
+        weight === 'medium' ? { fontWeight: '500' } : undefined,
+        weight === 'semibold' ? { fontWeight: '600' } : undefined,
+        weight === 'bold' ? { fontWeight: 'bold' } : undefined,
         style,
       ]}
       {...rest}
