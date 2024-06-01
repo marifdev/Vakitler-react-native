@@ -1,5 +1,5 @@
-import { Stack, useNavigation } from 'expo-router';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Link, Stack, useNavigation } from 'expo-router';
+import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
@@ -35,7 +35,8 @@ const calculateTimeRemaining = (currentVakitIndex: number) => {
   const nextVakitTime = new Date(
     now.getFullYear(),
     now.getMonth(),
-    currentVakitIndex === 5 ? now.getDate() + 1 : now.getDate(),
+    // if current vakit is yatsi and time is before midnight, set next day
+    (currentVakitIndex === 5 && now.getHours() > parseInt(vakitler[0].time.split(':')[0])) ? now.getDate() + 1 : now.getDate(),
     parseInt(vakitler[getNextVakitIndex(currentVakitIndex)].time.split(':')[0]),
     parseInt(vakitler[getNextVakitIndex(currentVakitIndex)].time.split(':')[1]),
     0
@@ -127,21 +128,23 @@ export default function Home() {
     <ThemedView vakit={currentVakit} colorName={"background"} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {/* <ThemedView colorName={"background"}> */}
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 16,
-            paddingVertical: 6,
-            borderRadius: 50,
-            flexDirection: 'row',
-            backgroundColor: Colors[currentVakit][2],
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-          }}
-          onPress={() => alert('Settings')}>
-          <AdjustmentsHorizontalIcon color={Colors[currentVakit].text} size={20} />
-          <ThemedText vakit={currentVakit} type="default">DENIZLI</ThemedText>
-        </TouchableOpacity>
+        <Link href="/(settings)" asChild>
+          <Pressable
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 6,
+              borderRadius: 50,
+              flexDirection: 'row',
+              backgroundColor: Colors[currentVakit][2],
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+            }}
+          >
+            <AdjustmentsHorizontalIcon color={Colors[currentVakit].text} size={20} />
+            <ThemedText vakit={currentVakit} type="default">DENIZLI</ThemedText>
+          </Pressable>
+        </Link>
         {/* </ThemedView> */}
         <View style={{ flex: 1, alignItems: "center", justifyContent: 'center' }}>
           <ThemedText vakit={currentVakit} size='lg' weight='medium'>{vakitler[getNextVakitIndex(currentVakitIndex)].name} Vaktine</ThemedText>
