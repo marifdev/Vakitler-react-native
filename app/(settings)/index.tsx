@@ -2,10 +2,24 @@ import { SectionList, View, Text, Pressable, TouchableOpacity, StyleSheet } from
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { MapPinIcon, BellIcon, ChevronRightIcon } from 'react-native-heroicons/solid'
+import { useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
+import React from 'react';
 export default function Settings() {
+  const [selectedDistrict, setSelectedDistrict] = React.useState('ISTANBUL');
   // If the page was reloaded or navigated to directly, then the modal should be presented as
   // a full screen page. You may need to change the UI to account for this.
   const isPresented = router.canGoBack();
+  useEffect(() => {
+    if (isPresented) {
+      SecureStore.getItemAsync('selectedDistrict').then((district) => {
+        if (district) {
+          //set the selected district to the state
+          setSelectedDistrict(JSON.parse(district).IlceAdi);
+        }
+      });
+    }
+  }, [])
   return (
     <View style={{ flex: 1, }}>
       {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
@@ -20,7 +34,7 @@ export default function Settings() {
           >
             <View style={styles.itemLeading}>
               <MapPinIcon size={20} />
-              <Text style={styles.itemText}>DENIZLI</Text>
+              <Text style={styles.itemText}>{selectedDistrict}</Text>
             </View>
             <ChevronRightIcon size={18} />
           </TouchableOpacity>

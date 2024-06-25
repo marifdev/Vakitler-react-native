@@ -19,3 +19,16 @@ export type VakitData = {
   Ogle: string
   Yatsi: string
 }
+
+export type Data = {
+  currentVakit: VakitData
+  currentVakitIndex: number
+  currentVakitName: "imsak" | "gunes" | "ogle" | "ikindi" | "aksam" | "yatsi"
+  nextVakitIndex: number
+  nextVakitName: string
+  vakitler: { name: string, time: string }[]
+  timeRemaining: {
+    hours: number
+    minutes: number
+  }
+}

@@ -1,12 +1,16 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import { Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
 import { countries } from '@/services/countries'
-import { Link } from 'expo-router'
+import { Link, useNavigation } from 'expo-router'
 import { ChevronRightIcon } from 'react-native-heroicons/solid'
+import { SearchBarCommands, SearchBarProps } from 'react-native-screens'
+import { NativeStackNavigationOptions } from 'react-native-screens/lib/typescript/native-stack/types'
 
 const Country = () => {
+
   return (
     <FlatList
+      contentInsetAdjustmentBehavior='automatic'
       style={{ paddingHorizontal: 16, backgroundColor: 'white' }}
       data={countries}
       renderItem={({ item }) => (
@@ -21,6 +25,7 @@ const Country = () => {
       )}
       keyExtractor={(item) => item.UlkeID}
     />
+
   )
 }
 

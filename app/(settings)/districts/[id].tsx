@@ -1,42 +1,51 @@
 import { View, Text, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
-import { Link, useLocalSearchParams } from 'expo-router';
-import { City } from '@/types/City';
+import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
 import { ChevronRightIcon } from 'react-native-heroicons/solid';
+import { Ilce } from '@/types/Ilce';
+import * as SecureStore from 'expo-secure-store';
+import { router } from 'expo-router';
 
-const Cities = () => {
+const Districts = () => {
   const { id } = useLocalSearchParams();
-  const [cities, setCities] = React.useState<City[]>([]);
+  const [cities, setCities] = React.useState<Ilce[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    fetch(`https://ezanvakti.herokuapp.com/sehirler/${id}`)
+    fetch(`https://ezanvakti.herokuapp.com/ilceler/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        data = data as City[];
+        data = data as Ilce[];
         setCities(data);
         setLoading(false);
       });
   }, [id]);
+
+  const storeSelectedDistrict = async (district: Ilce) => {
+    //store to local device storage
+    await SecureStore.setItemAsync('selectedDistrict', JSON.stringify(district));
+    //close the modal
+    router.replace('/');
+  }
+
   return loading ?
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" />
     </View> :
     <FlatList
-      contentInsetAdjustmentBehavior='always'
+      initialNumToRender={10}
       style={{ paddingHorizontal: 16, backgroundColor: 'white' }}
       data={cities}
       renderItem={({ item }) => (
-        <Link href={`districts/${item.SehirID}`} asChild>
-          <TouchableOpacity
-            style={styles.sectionItem}
-          >
-            <Text style={styles.itemText}>{item.SehirAdi}</Text>
-            <ChevronRightIcon size={18} color={'gray'} />
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity
+          style={styles.sectionItem}
+          onPress={() => storeSelectedDistrict(item)}
+        >
+          <Text style={styles.itemText}>{item.IlceAdi}</Text>
+          <ChevronRightIcon size={18} color={'gray'} />
+        </TouchableOpacity>
       )}
-      keyExtractor={(item) => item.SehirID}
+      keyExtractor={(item) => item.IlceID}
     />
 }
 
@@ -62,4 +71,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Cities
+export default Districts
