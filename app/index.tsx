@@ -1,5 +1,5 @@
 import { Link, Stack, useNavigation } from 'expo-router';
-import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, Pressable, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
@@ -196,7 +196,7 @@ export default function Home() {
   return (
     isLoading ? <Text>Loading...</Text> :
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: getBackgroundColor() }}>
-        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: Platform.OS === "android" ? ((StatusBar.currentHeight ?? 0) + 16) : 0 }}>
           <SettingsButton selectedDistrict={selectedDistrict} />
           <View style={{ flex: 1, alignItems: "center", justifyContent: 'center' }}>
             <ThemedText color={getTextColor()} size='lg' weight='medium'>{data!.vakitler[getNextVakitIndex(data!.currentVakitIndex)].name} Vaktine</ThemedText>
