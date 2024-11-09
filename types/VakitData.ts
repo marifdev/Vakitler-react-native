@@ -1,3 +1,5 @@
+import { PrayerName } from "@/enum/PrayerName"
+
 export type VakitData = {
   Aksam: string
   AyinSekliURL: string
@@ -23,7 +25,7 @@ export type VakitData = {
 export type Data = {
   currentVakit: VakitData
   currentVakitIndex: number
-  currentVakitName: "imsak" | "gunes" | "ogle" | "ikindi" | "aksam" | "yatsi"
+  currentVakitName: PrayerName
   nextVakitIndex: number
   nextVakitName: string
   vakitler: { name: string, time: string }[]

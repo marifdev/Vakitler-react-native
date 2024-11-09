@@ -1,13 +1,14 @@
 import { View, Text, Animated } from 'react-native'
 import React, { useEffect } from 'react'
 import { Colors } from '@/constants/Colors'
-import { ThemedView } from './ThemedView'
 import { ThemedText } from './ThemedText'
 import { Easing } from 'react-native-reanimated'
 import { opacity } from 'react-native-reanimated/lib/typescript/reanimated2/Colors'
+import { PrayerName } from '@/enum/PrayerName'
+import { getBackgroundColor, getTextColor, getTimeColorByIndex } from '@/shared/colorMethods'
 
 type TimeRowProps = {
-  currentVakit: keyof typeof Colors
+  currentVakit: PrayerName,
   vakit: { name: string, time: string }
   isCurrent: boolean
   index: any,
@@ -15,7 +16,7 @@ type TimeRowProps = {
 }
 
 const TimeRow = ({ currentVakit, vakit, isCurrent, index, delay }: TimeRowProps) => {
-  // const offset = new Animated.Value(300);
+
   const opacity = new Animated.Value(0);
   useEffect(() => {
     Animated.timing(opacity, {
@@ -28,11 +29,12 @@ const TimeRow = ({ currentVakit, vakit, isCurrent, index, delay }: TimeRowProps)
 
   return (
     <Animated.View style={{ flexDirection: 'row', opacity }}>
-      <ThemedView vakit={currentVakit} colorName={index} style={{
+      <View style={{
         width: "100%",
         paddingHorizontal: 21,
         paddingVertical: 9,
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: getTimeColorByIndex(index),
       }}>
         <View
           style={[
@@ -49,14 +51,14 @@ const TimeRow = ({ currentVakit, vakit, isCurrent, index, delay }: TimeRowProps)
               justifyContent: "space-between",
             }]}
         >
-          <ThemedText vakit={currentVakit} size='xl' weight='medium'>{vakit.name}</ThemedText>
+          <ThemedText color={getTextColor()} size='xl' weight='medium'>{vakit.name}</ThemedText>
           <ThemedText
-            vakit={currentVakit}
+            color={getTextColor()}
             size='xl'
             style={{ fontVariant: ['tabular-nums'] }}
           >{vakit.time}</ThemedText>
         </View>
-      </ThemedView>
+      </View>
     </Animated.View>
   )
 }

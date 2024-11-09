@@ -1,5 +1,7 @@
-export const Colors = {
-  imsak: {
+import { PrayerName } from "@/enum/PrayerName";
+
+export const Colors: { [key in PrayerName]: any } = {
+  [PrayerName.Imsak]: {
     text: '#065984',
     background: '#DAF2FE',
     border: '#9AC1D9',
@@ -11,7 +13,7 @@ export const Colors = {
     5: '#A9DAF9',
     bottom: "#9FD7F7"
   },
-  gunes: {
+  [PrayerName.Gunes]: {
     text: '#993413',
     background: '#FEEAD5',
     border: '#E1AC90',
@@ -23,7 +25,7 @@ export const Colors = {
     5: '#FDC7A2',
     bottom: "#FDC19A"
   },
-  ogle: {
+  [PrayerName.Ogle]: {
     text: '#844D0F',
     background: '#FEF6CB',
     border: '#D9BC84',
@@ -35,7 +37,7 @@ export const Colors = {
     5: '#F9E29B',
     bottom: "#F8DE93"
   },
-  ikindi: {
+  [PrayerName.Ikindi]: {
     text: '#993413',
     background: '#FFEDD5',
     border: '#E1A585',
@@ -47,7 +49,7 @@ export const Colors = {
     5: '#FEC9A1',
     bottom: "#FEC49A"
   },
-  aksam: {
+  [PrayerName.Aksam]: {
     text: '#1D40AF',
     background: '#DFEDFF',
     border: '#8AA7E7',
@@ -59,7 +61,7 @@ export const Colors = {
     5: '#AFCDFD',
     bottom: '#A7C8FC'
   },
-  yatsi: {
+  [PrayerName.Yatsi]: {
     text: '#3730A3',
     background: '#E4E8FE',
     border: '#9595E0',

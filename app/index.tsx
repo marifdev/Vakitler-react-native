@@ -3,13 +3,17 @@ import { Pressable, SafeAreaView, Text, TouchableOpacity, View } from 'react-nat
 import { useEffect, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
-import { ThemedView } from '@/components/ThemedView';
+// import { View } from '@/components/View';
 import { AdjustmentsHorizontalIcon } from 'react-native-heroicons/outline'
 import TimeRow from '@/components/TimeRow';
 import { CurrentVakitType } from '@/types/CurrentVakitType';
 import * as SecureStore from 'expo-secure-store';
 import { Ilce } from '@/types/Ilce';
 import { Data, VakitData } from '@/types/VakitData';
+import React from 'react';
+import SettingsButton from '@/components/SettingsButton';
+import { PrayerName } from '@/enum/PrayerName';
+import { getBackgroundColor, getBottomColor, getTextColor } from '@/shared/colorMethods';
 
 const today = new Date();
 const todayString = today.toLocaleDateString("tr-TR", { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -31,32 +35,32 @@ export default function Home() {
     const aksam = todaysVakit.Aksam.split(':').join('');
     const yatsi = todaysVakit.Yatsi.split(':').join('');
 
-    const currentVakit: CurrentVakitType = { vakitName: 'yatsi', vakitIndex: 5 };
+    const currentVakit: CurrentVakitType = { vakitName: PrayerName.Yatsi, vakitIndex: 5 };
     if (timeString < imsak) {
       return currentVakit;
     }
     if (timeString < gunes) {
-      currentVakit.vakitName = 'imsak';
+      currentVakit.vakitName = PrayerName.Imsak;
       currentVakit.vakitIndex = 0;
       return currentVakit;
     }
     if (timeString < ogle) {
-      currentVakit.vakitName = 'gunes';
+      currentVakit.vakitName = PrayerName.Gunes;
       currentVakit.vakitIndex = 1;
       return currentVakit;
     }
     if (timeString < ikindi) {
-      currentVakit.vakitName = 'ogle';
+      currentVakit.vakitName = PrayerName.Ogle;
       currentVakit.vakitIndex = 2;
       return currentVakit;
     }
     if (timeString < aksam) {
-      currentVakit.vakitName = 'ikindi';
+      currentVakit.vakitName = PrayerName.Ikindi;
       currentVakit.vakitIndex = 3;
       return currentVakit;
     }
     if (timeString < yatsi) {
-      currentVakit.vakitName = 'aksam';
+      currentVakit.vakitName = PrayerName.Aksam;
       currentVakit.vakitIndex = 4;
       return currentVakit;
     }
@@ -123,7 +127,7 @@ export default function Home() {
     const dataObject: Data = {
       currentVakit: todaysVakit,
       currentVakitIndex: 0,
-      currentVakitName: 'imsak',
+      currentVakitName: PrayerName.Imsak,
       nextVakitIndex: 1,
       nextVakitName: 'gunes',
       vakitler: [
@@ -187,49 +191,33 @@ export default function Home() {
     });
   }
 
+
+
   return (
     isLoading ? <Text>Loading...</Text> :
-      <ThemedView vakit={data!.currentVakitName} colorName={"background"} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: getBackgroundColor() }}>
         <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          {/* <ThemedView colorName={"background"}> */}
-          <Link href="/(settings)" asChild>
-            <Pressable
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 6,
-                borderRadius: 50,
-                flexDirection: 'row',
-                backgroundColor: Colors[data!.currentVakitName][2],
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-              }}
-            >
-              <AdjustmentsHorizontalIcon color={Colors[data!.currentVakitName].text} size={20} />
-              <ThemedText vakit={data!.currentVakitName} type="default">{selectedDistrict?.IlceAdi}</ThemedText>
-            </Pressable>
-          </Link>
-          {/* </ThemedView> */}
+          <SettingsButton selectedDistrict={selectedDistrict} />
           <View style={{ flex: 1, alignItems: "center", justifyContent: 'center' }}>
-            <ThemedText vakit={data!.currentVakitName} size='lg' weight='medium'>{data!.vakitler[getNextVakitIndex(data!.currentVakitIndex)].name} Vaktine</ThemedText>
+            <ThemedText color={getTextColor()} size='lg' weight='medium'>{data!.vakitler[getNextVakitIndex(data!.currentVakitIndex)].name} Vaktine</ThemedText>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'baseline', gap: 2 }}>
               {data!.timeRemaining!.hours !== 0 && (
                 <>
-                  <ThemedText vakit={data!.currentVakitName} size='5xl' weight='semibold' >{data!.timeRemaining!.hours}</ThemedText>
-                  <ThemedText vakit={data!.currentVakitName} size='5xl' weight='light' >sa</ThemedText>
+                  <ThemedText color={getTextColor()} size='5xl' weight='semibold' >{data!.timeRemaining!.hours}</ThemedText>
+                  <ThemedText color={getTextColor()} size='5xl' weight='light' >sa</ThemedText>
                   <View style={{ width: 8 }} />
                 </>
               )}
 
-              <ThemedText vakit={data!.currentVakitName} size='5xl' weight='semibold' >{data!.timeRemaining!.minutes}</ThemedText>
-              <ThemedText vakit={data!.currentVakitName} size='5xl' weight='light' >dk</ThemedText>
+              <ThemedText color={getTextColor()} size='5xl' weight='semibold' >{data!.timeRemaining!.minutes}</ThemedText>
+              <ThemedText color={getTextColor()} size='5xl' weight='light' >dk</ThemedText>
             </View>
           </View>
           {
             data!.vakitler.map((v, i) => (
               <TimeRow
                 key={i}
-                currentVakit={data!.currentVakitName}
+                currentVakit={PrayerName.Yatsi}
                 isCurrent={data!.currentVakitIndex === i}
                 vakit={v}
                 index={i}
@@ -238,28 +226,14 @@ export default function Home() {
             ))
           }
         </SafeAreaView>
-        <ThemedView vakit={data!.currentVakitName} colorName={"bottom"} style={{ height: 34, width: '100%' }} />
-      </ThemedView>
+        <View style={{ height: 34, width: '100%', backgroundColor: getBottomColor() }} />
+      </View>
 
   );
 
-  function calculateDelay(i: number) {
-    switch (i) {
-      case 0:
-        return 500;
-      case 1:
-        return 400;
-      case 2:
-        return 300;
-      case 3:
-        return 200;
-      case 4:
-        return 100;
-      case 5:
-        return 0;
-      default:
-        return 0;
-    }
+  function calculateDelay(index: number) {
+    const delays = [500, 400, 300, 200, 100, 0];
+    return delays[index] || 0;
   }
 }
 

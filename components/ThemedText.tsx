@@ -1,10 +1,11 @@
 import { Text, type TextProps, StyleSheet } from 'react-native';
 
-import { useThemeColor } from '@/hooks/useThemeColor';
+// import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
+import { PrayerName } from '@/enum/PrayerName';
 
 export type ThemedTextProps = TextProps & {
-  vakit: keyof typeof Colors,
+  color: string;
   size?: "sm" | "lg" | "xl" | "5xl";
   weight?: "light" | "normal" | "medium" | "semibold" | "bold";
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
@@ -12,17 +13,12 @@ export type ThemedTextProps = TextProps & {
 
 export function ThemedText({
   style,
-  vakit,
+  color = Colors[PrayerName.Imsak].text,
   type = 'default',
   size = 'sm',
   weight = 'medium',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor(
-    vakit,
-    // vakit,
-    "text"
-  );
 
   return (
     <Text
@@ -41,29 +37,3 @@ export function ThemedText({
     />
   );
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: '#0a7ea4',
-  },
-});
